@@ -68,21 +68,21 @@ func createCommand(w http.ResponseWriter, r * http.Request) {
 }
 
 // Update Commands
-func updateCommands(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	for index, item := range commands {
-		if item.ID == params["id"] {
-			commands = append(commands[:index], commands[index+1:]...)
-			var command Command
-			_ = json.NewDecoder(r.Body).Decode(&command)
-			command.ID = params["id"]
-			commands = append(commands, command)
-			json.NewEncoder(w).Encode(command)
-			return
-		}
-	}
-}
+//func updateCommands(w http.ResponseWriter, r *http.Request) {
+//	w.Header().Set("Content-Type", "application/json")
+//	params := mux.Vars(r)
+//	for index, item := range commands {
+//		if item.ID == params["id"] {
+//			commands = append(commands[:index], commands[index+1:]...)
+//			var command Command
+//			_ = json.NewDecoder(r.Body).Decode(&command)
+//			command.ID = params["id"]
+//			commands = append(commands, command)
+//			json.NewEncoder(w).Encode(command)
+//			return
+//		}
+//	}
+//}
 
 func main() {
 
@@ -117,6 +117,7 @@ func main() {
 	r.HandleFunc("/commands/{id}", getCommand).Methods("GET")
 	r.HandleFunc("/commands", createCommand).Methods("POST")
 	r.HandleFunc("/commands", getCommands).Methods("GET")
+	//r.HandleFunc("/commands", getCommands).Methods("UPDATE")
 
 	port := os.Getenv("PORT")
 	if port == "" {
