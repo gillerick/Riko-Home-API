@@ -12,12 +12,19 @@ import ("fmt"
 
 
 //Command struct
+type Transcript struct {
+	ID int  `json:"id"`
+	Text  string  `json:"text"`
+}
+
 type Command struct {
-	ID        string  `json:"id"`
-	Text      string  `json:"text"`
+	ID int `json:"id"`
+	Command string `json:"command"`
+	DeviceID int `json:"device_id"`
 }
 
 var commands []Command
+var transcripts []Transcript
 
 // Index Handler
 func indexHandler(w http.ResponseWriter, r * http.Request) {
@@ -29,18 +36,18 @@ func indexHandler(w http.ResponseWriter, r * http.Request) {
 }
 
 //index handler that fetches all commands
-func getCommands(w http.ResponseWriter, r *http.Request) {
+func getTranscripts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(commands)
+	json.NewEncoder(w).Encode(transcripts)
 }
 
 
 // indexHandler that fetches commands
-func getCommand(w http.ResponseWriter, r * http.Request) {
+func getTranscript(w http.ResponseWriter, r * http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	for _, item := range commands {
-		if item.ID == params["id"] {
+	for _, item := range transcripts {
+		if params["id"] == strconv.Itoa(item.ID) {
 			json.NewEncoder(w).Encode(item)
 			return
 		}
@@ -49,30 +56,27 @@ func getCommand(w http.ResponseWriter, r * http.Request) {
 }
 
 // indexHandler that fetches commands
-func createCommand(w http.ResponseWriter, r * http.Request) {
+func createTranscript(w http.ResponseWriter, r * http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var command Command
-	_ = json.NewDecoder(r.Body).Decode(&command)
-	command.ID = strconv.Itoa(rand.Intn(1000))
-	commands = append(commands, command)
-	json.NewEncoder(w).Encode(command)
+	var transcript Transcript
+	_ = json.NewDecoder(r.Body).Decode(&transcript)
+	for i := 0; i < 100; i++ {
+	transcript.ID = rand.Intn(i)
+	transcripts = append(transcripts, transcript)
+	json.NewEncoder(w).Encode(transcript)
+	}
 }
 func main() {
-	commands = append(commands, Command{
-		ID:        "1",
-		Text:      "Turn on the kitchen lights"})
-
-	commands = append(commands, Command{
-		ID:        "2",
-		Text:      "Turn Off the bedroom lights"})
+	transcripts = append(transcripts, Transcript{ ID: 1, Text: "Turn on the kitchen lights"})
+	transcripts = append(transcripts, Transcript{ ID: 2, Text: "Turn Off the bedroom lights"})
 
 	//Initialize the Mux Handler
 	r := mux.NewRouter()
 
 	//Define the endpoints
-	r.HandleFunc("/commands/{id}", getCommand).Methods("GET")
-	r.HandleFunc("/commands", createCommand).Methods("POST")
-	r.HandleFunc("/commands", getCommands).Methods("GET")
+	r.HandleFunc("/transcript/{id}", getTranscript).Methods("GET")
+	r.HandleFunc("/transcript", createTranscript).Methods("POST")
+	r.HandleFunc("/transcripts", getTranscripts).Methods("GET")
 	r.HandleFunc("/", indexHandler)
 
 	port := os.Getenv("PORT")
