@@ -34,7 +34,7 @@ func indexHandler(w http.ResponseWriter, r * http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	fmt.Fprint(w, "Hello, World!")
+	fmt.Fprint(w, "Welcome to Riko Home Automation!")
 }
 
 //index handler that fetches all commands
@@ -66,24 +66,6 @@ func createCommand(w http.ResponseWriter, r * http.Request) {
 	commands = append(commands, command)
 	json.NewEncoder(w).Encode(command)
 }
-
-// Update Commands
-//func updateCommands(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", "application/json")
-//	params := mux.Vars(r)
-//	for index, item := range commands {
-//		if item.ID == params["id"] {
-//			commands = append(commands[:index], commands[index+1:]...)
-//			var command Command
-//			_ = json.NewDecoder(r.Body).Decode(&command)
-//			command.ID = params["id"]
-//			commands = append(commands, command)
-//			json.NewEncoder(w).Encode(command)
-//			return
-//		}
-//	}
-//}
-
 func main() {
 
 
@@ -117,7 +99,7 @@ func main() {
 	r.HandleFunc("/commands/{id}", getCommand).Methods("GET")
 	r.HandleFunc("/commands", createCommand).Methods("POST")
 	r.HandleFunc("/commands", getCommands).Methods("GET")
-	//r.HandleFunc("/commands", getCommands).Methods("UPDATE")
+	r.HandleFunc("/", indexHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
