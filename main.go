@@ -86,24 +86,6 @@ func updateCommands(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	//Initialize the Mux Handler
-	r := mux.NewRouter()
-
-	//Define the endpoints
-	r.HandleFunc("/commands/{id}", getCommand).Methods("GET")
-	r.HandleFunc("/commands", createCommand).Methods("POST")
-	r.HandleFunc("/commands", getCommands).Methods("GET")
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-		log.Printf("Defaulting to port %s", port)
-	}
-
-	log.Printf("Listening on port %s", port)
-	if err := http.ListenAndServe(":"+port, r); err != nil {
-		log.Fatal(err)
-	}
 
 
 	commands = append(commands, Command{
@@ -128,4 +110,22 @@ func main() {
 
 
 
+	//Initialize the Mux Handler
+	r := mux.NewRouter()
+
+	//Define the endpoints
+	r.HandleFunc("/commands/{id}", getCommand).Methods("GET")
+	r.HandleFunc("/commands", createCommand).Methods("POST")
+	r.HandleFunc("/commands", getCommands).Methods("GET")
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+
+	log.Printf("Listening on port %s", port)
+	if err := http.ListenAndServe(":"+port, r); err != nil {
+		log.Fatal(err)
+	}
 }
