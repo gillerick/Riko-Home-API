@@ -15,15 +15,6 @@ import ("fmt"
 type Command struct {
 	ID        string  `json:"id"`
 	Text      string  `json:"text"`
-	Command   string  `json:"command"`
-	TimeStamp string  `json:"timestamp"`
-	Device    *Device `json:"device"`
-}
-
-type Device struct {
-	ID   string `json:"id"`
-	Name string `json:"status"`
-	Status string `json:"status"`
 }
 
 var commands []Command
@@ -62,35 +53,18 @@ func createCommand(w http.ResponseWriter, r * http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var command Command
 	_ = json.NewDecoder(r.Body).Decode(&command)
-	command.ID = strconv.Itoa(rand.Intn(100))
+	command.ID = strconv.Itoa(rand.Intn(1000))
 	commands = append(commands, command)
 	json.NewEncoder(w).Encode(command)
 }
 func main() {
-
-
-
 	commands = append(commands, Command{
 		ID:        "1",
-		Text:      "Turn on the kitchen lights",
-		Command:   "on kitchen",
-		TimeStamp: "20200126",
-		Device: &Device{
-			ID:     "1",
-			Name:   "Kitchen Lights",
-			Status: "ON"}})
+		Text:      "Turn on the kitchen lights"})
 
 	commands = append(commands, Command{
 		ID:        "2",
-		Text:      "Turn Off the bedroom lights",
-		Command:   "Off bedroom",
-		TimeStamp: "20200126",
-		Device: &Device{
-			ID:     "2",
-			Name:   "Bedroom Lights",
-			Status: "OFF"}})
-
-
+		Text:      "Turn Off the bedroom lights"})
 
 	//Initialize the Mux Handler
 	r := mux.NewRouter()
