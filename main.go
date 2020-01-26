@@ -35,7 +35,7 @@ func indexHandler(w http.ResponseWriter, r * http.Request) {
 	fmt.Fprint(w, "Welcome to Riko Home Automation!")
 }
 
-//index handler that fetches all commands
+//index handler that fetches all transcripts
 func getTranscripts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(transcripts)
@@ -47,12 +47,12 @@ func getTranscript(w http.ResponseWriter, r * http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	for _, item := range transcripts {
-		if params["id"] == strconv.Itoa(item.ID) {
+		if strconv.Itoa(item.ID) == params["id"] {
 			json.NewEncoder(w).Encode(item)
 			return
 		}
 	}
-	json.NewEncoder(w).Encode(&Command{})
+	json.NewEncoder(w).Encode(&Transcript{})
 }
 
 // indexHandler that fetches commands
@@ -60,11 +60,9 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var transcript Transcript
 	_ = json.NewDecoder(r.Body).Decode(&transcript)
-	for i := 0; i < 100; i++ {
-	transcript.ID = rand.Intn(i)
+	transcript.ID = rand.Intn(rand.Intn(100))
 	transcripts = append(transcripts, transcript)
 	json.NewEncoder(w).Encode(transcript)
-	}
 }
 func main() {
 	transcripts = append(transcripts, Transcript{ ID: 1, Text: "Turn on the kitchen lights"})
