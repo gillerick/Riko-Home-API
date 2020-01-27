@@ -12,12 +12,13 @@ import ("fmt"
 )
 
 
-//Command struct
+//Transcript struct
 type Transcript struct {
 	ID int  `json:"id"`
 	Text  string  `json:"text"`
 }
 
+//Command struct
 type Command struct {
 	ID int `json:"id"`
 	Command int `json:"command"`
@@ -47,7 +48,7 @@ func getCommand(w http.ResponseWriter, r * http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	for _, item := range commands {
-		if strconv.Itoa(item.ID) == params["id"] {
+		if strconv.Itoa(item.ID) == params["device_id"] {
 			json.NewEncoder(w).Encode(item)
 			return
 		}
@@ -93,49 +94,64 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 
 
 	if pattern1.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:1})
 	}
 
 	if pattern2.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:1})
 	}
 
 	if pattern3.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:2})
 	}
 
 	if pattern4.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:2})
 	}
 
 	if pattern5.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:3})
 	}
 
 	if pattern6.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:3})
 	}
 
 	if pattern7.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:4})
 	}
 
 	if pattern8.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:4})
 	}
 
 	if pattern9.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:5})
 	}
 
 	if pattern10.MatchString(transcript.Text){
+		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:5})
 	}
 }
 
+//Function that deletes previous commands
+func delPreviousCommands() {
+	commands = nil
+}
+
 func main() {
+	//Hard coded transcript for testing
 	transcripts = append(transcripts, Transcript{ ID: 1, Text: "Turn on the kitchen lights"})
-	transcripts = append(transcripts, Transcript{ ID: 2, Text: "Turn Off the bedroom lights"})
 
 	//Initialize the Mux Handler
 	r := mux.NewRouter()
