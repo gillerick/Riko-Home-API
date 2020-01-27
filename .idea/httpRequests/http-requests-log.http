@@ -1,0 +1,18 @@
+GET http://localhost:8080/commands
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://localhost:8080/transcripts
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://localhost:8080/transcripts
+Accept: */*
+Cache-Control: no-cache
+
+###
+

@@ -36,7 +36,7 @@ func indexHandler(w http.ResponseWriter, r * http.Request) {
 	fmt.Fprint(w, "Welcome to Riko Home Automation!")
 }
 
-//index handler that fetches all transcripts
+//index handler that fetches all commands
 func getCommands(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(commands)
@@ -78,6 +78,7 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 	transcripts = append(transcripts, transcript)
 	json.NewEncoder(w).Encode(transcript)
 
+
 	//Patterns to check out for
 	pattern1 := regexp.MustCompile(`on.*bedroom|bedroom.*on`)
 	pattern2 := regexp.MustCompile(`off.*bedroom|bedroom.*off`)
@@ -89,6 +90,7 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 	pattern8 := regexp.MustCompile(`off.*kitchen|kitchen.*off`)
 	pattern9 := regexp.MustCompile(`on.*buzzer|buzzer.*on`)
 	pattern10 := regexp.MustCompile(`off.*buzzer|buzzer.*off`)
+
 
 	if pattern1.MatchString(transcript.Text){
 		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:1})
