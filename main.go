@@ -141,10 +141,9 @@ func main() {
 	//Define the endpoints
 	r.HandleFunc("/transcripts/{id}", getTranscript).Methods("GET")
 	r.HandleFunc("/transcripts", createTranscript).Methods("POST")
-	r.HandleFunc("/transcripts/{id}", getCommand).Methods("GET")
-	r.HandleFunc("/transcripts", getCommands).Methods("GET")
+	r.HandleFunc("/commands/{id}", getCommand).Methods("GET")
+	r.HandleFunc("/commands", getCommands).Methods("GET")
 	r.HandleFunc("/", indexHandler)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
