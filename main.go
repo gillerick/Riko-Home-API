@@ -161,6 +161,7 @@ func delPreviousCommands() {
 	commands = nil
 }
 
+
 func main() {
 	//Hard coded transcript for testing
 	transcripts = append(transcripts, Transcript{ ID: 1, Text: "Turn on the kitchen lights"})
