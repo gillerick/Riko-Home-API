@@ -80,7 +80,7 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 	json.NewEncoder(w).Encode(transcript)
 
 
-	//Patterns to check out for
+	//Patterns to check out for keywords in transcribed text
 	pattern1 := regexp.MustCompile(`on.*bedroom|bedroom.*on`)
 	pattern2 := regexp.MustCompile(`off.*bedroom|bedroom.*off`)
 	pattern3 := regexp.MustCompile(`on.*sitting|sitting.*on|lounge.*on|on.*lounge`)
@@ -89,8 +89,10 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 	pattern6 := regexp.MustCompile(`off.*washroom|washroom.*off| off.*bathroom|off.*bathroom`)
 	pattern7 := regexp.MustCompile(`on.*kitchen|kitchen.*on`)
 	pattern8 := regexp.MustCompile(`off.*kitchen|kitchen.*off`)
-	pattern9 := regexp.MustCompile(`on.*buzzer|buzzer.*on`)
-	pattern10 := regexp.MustCompile(`off.*buzzer|buzzer.*off`)
+	pattern9 := regexp.MustCompile(`on.*buzzer|buzzer.*on|on.*alarm|alarm.*on`)
+	pattern10 := regexp.MustCompile(`play.*music|music.*play`)
+	pattern11 := regexp.MustCompile(`lights.*all.*on|all.*lights.*on`)
+	pattern12 := regexp.MustCompile(`lights.*all.*off|all.*lights.*off`)
 
 
 	if pattern1.MatchString(transcript.Text){
@@ -141,6 +143,16 @@ func createTranscript(w http.ResponseWriter, r * http.Request) {
 	if pattern10.MatchString(transcript.Text){
 		delPreviousCommands()
 		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:5})
+	}
+
+	if pattern11.MatchString(transcript.Text){
+		delPreviousCommands()
+		commands = append(commands, Command{ID: transcript.ID, Command:1, DeviceID:0})
+	}
+
+	if pattern12.MatchString(transcript.Text){
+		delPreviousCommands()
+		commands = append(commands, Command{ID: transcript.ID, Command:0, DeviceID:0})
 	}
 }
 
